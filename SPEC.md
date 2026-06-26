@@ -10,7 +10,7 @@ A `.knowledge` bundle is a directory (or repo) of plain files describing a **sin
 
 ```
 <subject>.knowledge/
-  cartridge.yaml        # manifest: identity + boundary policy (required)
+  capsule.yaml        # manifest: identity + boundary policy (required)
   BOUNDARY.md           # human-readable mirror of the boundary (optional)
   wiki/                 # curated content — markdown + frontmatter
   journal/              # append-only dated entries
@@ -38,7 +38,7 @@ related: [[other-doc]]
 - **`confidence:`** — how solid the claim is; doubles as the score a convergence layer's confidence gate writes (below a threshold → human-in-the-loop).
 - **`classification:`** — the sensitivity tag. Declared *with the content* so it travels with the bundle and a reader can enforce access without a central service.
 
-## 4. The manifest — `cartridge.yaml` *(draft)*
+## 4. The manifest — `capsule.yaml` *(draft)*
 
 ```yaml
 subject: <slug>
@@ -72,7 +72,7 @@ Convergence is the *only* writer of the derived/shared layer. Bundles never writ
 ## 7. OKF conformance + extensions
 
 - **Conformant:** a `.knowledge` bundle is readable as Open Knowledge Format.
-- **Extends OKF with:** the `BOUNDARY` / `rises:` policy, `classification` metadata, and the cartridge profile (manifest + the optional design/skills/decisions layers).
+- **Extends OKF with:** the `BOUNDARY` / `rises:` policy, `classification` metadata, and the capsule profile (manifest + the optional design/skills/decisions layers).
 
 ## 8. Open questions
 

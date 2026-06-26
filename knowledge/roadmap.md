@@ -12,7 +12,7 @@
 
 ## Later
 - Reference convergence runtime (or keep protocol-only).
-- `cartridge.yaml` schema + validator (extend OKF's reference validator).
+- `capsule.yaml` schema + validator (extend OKF's reference validator).
 - A conformance test suite.
 - **Eject / compact at maturity** (a Throughline feature): at maturity, keep the distilled value (curated wiki + decisions) and strip/archive the append-only journal firehose — the head/log-compaction pattern taken to its conclusion. Lets a mature bundle (or this repo) shed build-noise before hand-off or publish.
 
