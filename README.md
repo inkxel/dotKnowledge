@@ -2,7 +2,7 @@
 
 > **Status: early RFC (v0.0.x).** Directional and unstable. Shared early to invite discussion and stake the position; the spec hardens from real-world use, not from a committee.
 
-`.knowledge` is an open format for a **portable, self-describing knowledge base** — a sealed bundle that any tool or agent can read, carry, and hand off. One subject per bundle (a person, a project, a client, an org). Write it once; any "console" (an app, an agent, an editor) reads it.
+`.knowledge` is an open format for a **portable, self-describing knowledge base** — a sealed bundle that any tool or agent can read, carry, and hand off. One subject per bundle (a `person`, an `org`, or a `brand` — see [Subject types](#subject-types--perspective--authority)). Write it once; any "console" (an app, an agent, an editor) reads it.
 
 ## Why
 
@@ -15,6 +15,20 @@ Plain files — markdown plus a small manifest:
 - **content** — markdown documents, each with **frontmatter metadata** (type, confidence, classification/sensitivity, relationships).
 - **manifest** (`capsule.yaml` / `BOUNDARY`) — the bundle's identity and its **boundary policy** (`rises:` — what, if anything, may be synthesized *out* of this bundle).
 - *(optional)* **design tokens**, **skills**, **decisions** — the operable layers that make a bundle *do work*, not just store text.
+
+## Subject types — perspective & authority
+
+A bundle's **type** sets its *perspective*, and perspective sets *authority*. That's why the same brand can live in two bundles at once without conflict — they answer different questions.
+
+| type | perspective | source of truth for | examples |
+|---|---|---|---|
+| `person` | first-person · **decays** · never ships | "what I know & lived" | you, a colleague |
+| `org` | third-person, canonical | the organization's own record | Mattel, Disney, Collier Simon |
+| `brand` | third-person, canonical · nests under an `org` | a brand / account / IP's record | Hot Wheels, Experian, Gargoyles |
+
+**Relationship is orthogonal to type.** Client vs. in-house vs. employer is a *relationship* (`relationship: client | in-house | employer | partner`), not a type — an agency's client and an in-house brand are both `brand`, differing only in that field. One format spans agency work, in-house roles, and personal life without a new type per job.
+
+**The overlap:** a `brand` you work on lives in its own canonical bundle *and* in your `person` bundle — the brand bundle holds what's *true* about it; your bundle holds what you *lived*. Roll off the account and the brand bundle unmounts; your first-person residue stays with you and fades. Canonical facts → read the brand bundle; lived experience → read your bundle; never confuse the two. Full model in [`SPEC.md` §2](./SPEC.md).
 
 ## Relationship to OKF + the ecosystem
 
