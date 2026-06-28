@@ -4,11 +4,11 @@
 
 ## 1. Overview
 
-A `.knowledge` bundle is a directory (or repo) of plain files describing a **single subject** (a `person`, an `org`, or a `brand` — see §2). It is **self-describing** (it carries its own metadata and boundary), **portable** (any conforming reader can use it), and **sealed** (it contains no logic about other bundles).
+A `.knowledge` bundle is a directory (or repo) of plain files describing a **single subject** (a `person`, an `org`, a `brand`, or a `project` — see §2). It is **self-describing** (it carries its own metadata and boundary), **portable** (any conforming reader can use it), and **sealed** (it contains no logic about other bundles).
 
 ## 2. Subject types — perspective & authority
 
-Every bundle is keyed to one subject, and the subject's **type** fixes its *perspective* — and perspective fixes *authority*. This is the load-bearing distinction in the format: it is why the same real-world entity can appear in two bundles at once without contradiction.
+Every bundle is keyed to one subject, and the subject's **type** names *what kind of subject it is*. The kind fixes the bundle's *perspective*, and perspective fixes *authority*. This is the load-bearing distinction in the format: it is why the same real-world entity can appear in two bundles at once without contradiction.
 
 **Two perspectives:**
 
@@ -22,8 +22,11 @@ Every bundle is keyed to one subject, and the subject's **type** fixes its *pers
 | `person` | first-person · **decays** · never ships | "what I know & lived" | you, a colleague |
 | `org` | third-person, canonical | the organization's own record | Mattel, Disney, Collier Simon |
 | `brand` | third-person, canonical · nests under an `org` | a brand / account / IP's record | Hot Wheels, Experian, Gargoyles |
+| `project` | third-person, canonical · nests under a `brand`/`org` · **freezes** | a single effort's record, at the time it shipped | a game build, a campaign, a code repo |
 
-A `brand` bundle MAY declare a `parent:` org. `project` is reserved as an optional finer grain *under* a brand (a single product, campaign, or effort) but is not a required type.
+Only `person` flips perspective to first-person; `org`, `brand`, and `project` are all canonical and differ by **scale** (`org` ⊃ `brand` ⊃ `project`), not perspective. The type field answers *what kind of subject*; perspective is derived from the kind. A `brand` MAY declare a `parent:` org; a `project` MAY declare a `parent:` brand or org.
+
+**The bar for a new type:** a type must name something you would *seal and hand off as its own bundle*. `org`, `brand`, and `project` clear it. A *campaign*, *feature*, or *sprint* does not — a campaign **is** a `project` (developing a campaign is a project; once shipped it crystallizes into reusable assets — see §2.3), and a feature or sprint lives *inside* a project bundle's wiki/journal. This bar keeps the type vocabulary from sliding into an unbounded taxonomy.
 
 **Relationship is orthogonal to type.** Whether a third-person bundle is a *client*, an *in-house* line, an *employer*, or a *partner* is a **relationship**, not a type — the structure is identical either way. Record it on the manifest (§5):
 
@@ -36,6 +39,7 @@ So an agency's client and an in-house brand are the **same type** (`brand`), dif
 - Experian → `brand`, `relationship: client`, `parent: cosi`
 - Hot Wheels → `brand`, `relationship: in-house`, `parent: mattel`
 - Collier Simon → `org`, `relationship: employer`
+- A client's Q4 campaign → `project`, `relationship: client`, `parent: experian`
 
 This is what lets one format span agency work, in-house roles, and personal life without inventing a new type per employment model.
 
@@ -53,6 +57,16 @@ A console (the convergence layer, §7) **mounts** the bundles relevant to curren
 **Guardrail.** First-person residue MUST stay distinguishable from canonical record. Use `confidence:` and `last_updated:` (a fading memory is low-confidence and old) so a stale `person`-bundle recollection is never mistaken for a `brand` bundle's current truth. The rule for any reader:
 
 > **Canonical facts → read the `brand` / `org` bundle. Lived experience → read the `person` bundle. Never confuse the two.**
+
+### 2.3 Project lifecycle — freeze & crystallize
+
+A `project` is the one canonical type that **completes**, and a brand may run many at once (a brand with three live campaigns), each its own bundle nested under the brand. A project carries `status:` (§5):
+
+- **active** — in flight; the record is current.
+- **shipped** — delivered; authority crystallizes at the ship point (*"what was true at ship"*), distinct from the brand's ever-current record.
+- **archived** — closed out. Its durable residue is not just frozen text but **operable assets** — the subject-specific `skills/` and `design/` layers it produced (§3): a reusable skill, its design voice, its motion definitions. These can be archived as a layer and/or **promoted up into the parent brand's reusable layers**, so the brand keeps the capability while the moment-in-time project record is sealed.
+
+This is why `project` earns a type and not merely a flag on `brand`: it owns its own decisions, journal, skills, and design layers, freezes as a unit, and archives or hands off independently of the brand it served.
 
 ## 3. Bundle layout *(draft)*
 
@@ -90,9 +104,10 @@ related: [[other-doc]]
 
 ```yaml
 subject: <slug>
-type: person | org | brand                       # the subject type (§2)
-relationship: client | in-house | employer | partner   # org/brand only; orthogonal to type (§2)
-parent: <org-slug>                               # optional; for brand bundles that nest under an org
+type: person | org | brand | project             # the subject kind (§2)
+relationship: client | in-house | employer | partner   # canonical bundles only; orthogonal to type (§2)
+parent: <slug>                                   # optional; brand→org, project→brand/org nesting
+status: active | shipped | archived              # lifecycle; projects freeze & crystallize (§2.3)
 format_version: 0
 rises: never | filtered | de-identified          # the boundary (see §6)
 access: open | protected                         # protected → consult a whitelist
@@ -130,5 +145,5 @@ Convergence is the *only* writer of the derived/shared layer. Bundles never writ
 - The exact `rises:` vocabulary and how `filtered` is operationalized (the de-identification contract).
 - Versioning + migration of the format.
 - How subject-specific skills compose with shared/agency skills.
-- Whether `project` graduates from a reserved finer grain (§2) to a first-class type.
+- Whether to split `type` into a binary `perspective` (`person` vs `canonical`) plus an orthogonal `kind` (`org`/`brand`/`project`/…) — the v1 evolution if subject-kinds proliferate beyond the current set.
 - Whether the convergence protocol ships a reference runtime or stays protocol-only.
