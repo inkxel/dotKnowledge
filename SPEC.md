@@ -91,13 +91,19 @@ name: short-kebab-slug
 type: subsystem | topic | person | decision | ...
 created: YYYY-MM-DD
 last_updated: YYYY-MM-DD
-confidence: high | medium | low | speculative   # also where a convergence confidence-gate score lands
+basis: live-source | authored | partner-attested | vendor-doc | forecast | computed | inferred   # claim provenance
+status: proposed | accepted | superseded | deprecated   # record affirmation — applies to type: decision
+confidence: high | medium | low | speculative   # ordinal band, human-gradable
+score: 0.0-1.0   # optional — present only when actually computed; absent means "not computed," not "hidden"
 classification: public | internal | confidential | restricted   # sensitivity; assigned at ingest, enforced downstream
 related: [[other-doc]]
 ---
 ```
 
-- **`confidence:`** — how solid the claim is; doubles as the score a convergence layer's confidence gate writes (below a threshold → human-in-the-loop). Also the decay signal for first-person residue (§2.2).
+- **`basis:`** — where the claim came from, borrowed verbatim from [knowledge-catalog #151/#159](https://github.com/GoogleCloudPlatform/knowledge-catalog/issues/151)'s reliability enum. Distinct from `status:` — a claim can be `authored` (a person stated it directly) and still be an unaffirmed `status: proposed` record. Confusing the two is the exact bug this split exists to prevent.
+- **`status:`** — has *this record* been affirmed by a human, independent of how solid the claim inside it is. Standard ADR values. Automated writers may only ever write `status: proposed`; anything higher requires an append-only affirmation event, never an in-place edit of this field. Only meaningful on `type: decision` documents.
+- **`confidence:`** — an ordinal band a human can grade at a glance; the interoperable filter. No longer overloaded — see `score:`.
+- **`score:`** — optional 0.0–1.0 float, present only when a convergence layer's confidence gate has actually computed one. An absent `score` means "not computed," not "hidden." Also the decay signal for first-person residue (§2.2), separate from `confidence`'s human-gradable band.
 - **`classification:`** — the sensitivity tag. Declared *with the content* so it travels with the bundle and a reader can enforce access without a central service.
 
 ## 5. The manifest — `capsule.yaml` *(draft)*
@@ -131,7 +137,7 @@ How a layer mounts N bundles and synthesizes across them while honoring each bou
 1. **Mount** — register a set of bundles.
 2. **Read across** — answer cross-bundle queries, honoring each bundle's `rises:`.
 3. **Synthesize** — produce a derived/shared view from only what's permitted to rise.
-4. **Gate + audit** — two gates govern writes: a **confidence gate** (human-in-the-loop below a threshold) and a **classification / security agent** (tag, auto-classify, SOC-aligned). Either can block or reroute. Both write an **audit trail**.
+4. **Gate + audit** — two gates govern writes: a **confidence gate** (human-in-the-loop below a threshold) and a **classification / security agent** (tag, auto-classify, SOC-aligned). Either can block or reroute. Both write an **audit trail**. A gate cannot tell a human-affirmed record from an agent-inferred one — that is `status:`'s job, not `confidence`'s. A `type: decision` document at `status: proposed` may still rise into a derived/shared layer if `rises:` permits it, but it must carry its `status:` with it and the derived layer must render it as a proposal, never as canonical. See [decision-record-affirmation](https://github.com/inkxel/foundry) *(placeholder — link once FOUNDRY's spec has a public counterpart; internal reference: `knowledge/specs/2026-07-09-decision-record-affirmation.md`)*.
 
 Convergence is the *only* writer of the derived/shared layer. Bundles never write to each other.
 
