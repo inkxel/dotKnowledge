@@ -58,6 +58,8 @@ A console (the convergence layer, §7) **mounts** the bundles relevant to curren
 
 > **Canonical facts → read the `brand` / `org` bundle. Lived experience → read the `person` bundle. Never confuse the two.**
 
+**How residue actually gets written — engagement-triggered, never ambient.** A `person` bundle must never passively absorb a mounted `brand`/`org` bundle's content just because it's reachable — that would violate §2's own "selective, never the full file" definition of first-person residue, and it would go stale silently the moment the canonical bundle updates, with no signal that the copy no longer matches. Residue is written only from an actual act of engagement: a real query against the canonical bundle, and the answer received, is itself a work-activity event — the same "capture what happened while working" mechanism as any other source (a meeting, a thread), not a separate sync process. The novel-and-notebook framing: the canonical bundle is the novel, complete and sitting there; the person bundle is the reader's own notebook, which fills only with what the reader actually looked up and used — never a copy of the whole book. This is also why residue legitimately outlives the mount, and can predate a bundle ever existing at all — a decade at an employer with no `org` bundle of its own still leaves real notebook entries, written once when they mattered, decaying independently ever since, never re-synced to a source that may not even exist.
+
 ### 2.3 Project lifecycle — freeze & crystallize
 
 A `project` is the one canonical type that **completes**, and a brand may run many at once (a brand with three live campaigns), each its own bundle nested under the brand. A project carries `status:` (§5):
