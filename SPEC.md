@@ -143,6 +143,7 @@ legal_signoff: false
 ```
 
 - **`local:`** — a transport/handling property, distinct from `access:`/`rises:` (those govern *who* and *what*; this governs *how the bytes move*). `true` (default): the bundle is a sovereign, cloneable git repo — check it out fully, run it fully offline or against a local model. `false`: the rare bundle that must never leave a mediated runtime unmodified — served byte-scoped, streamed, never cloned raw. Treat `false` as an exception reached for deliberately, not a default posture.
+- **`subject:`** — **kebab-case, lowercase, always**, multi-word or not (`turbotax`, `creative-systems-studio`). The bundle's repo name mirrors it directly: `<subject>.knowledge`. One slug, one casing rule, no separate naming decision to make per capsule — a multi-word subject is not a special case.
 
 ## 6. The `rises:` boundary — the core extension *(draft)*
 
