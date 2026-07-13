@@ -75,11 +75,21 @@ This is why `project` earns a type and not merely a flag on `brand`: it owns its
   capsule.yaml        # manifest: identity + boundary policy (required)
   BOUNDARY.md           # human-readable mirror of the boundary (optional)
   wiki/                 # curated content — markdown + frontmatter
-  journal/              # append-only dated entries
+  sources/              # raw intake — transcripts, threads, exports (pointers or originals)
+  ledger/               # append-only, agent/harness-authored — what changed in this bundle, and why
+  journal/              # person-only (§2) — append-only, human-authored first-person record
   decisions/            # ADR-format decision records
   design/               # (optional) brand / design tokens (DTCG)
   skills/               # (optional) subject-specific skills
 ```
+
+**`sources/` vs. `ledger/` vs. `journal/` — three different voices, not one "journal" pattern wearing different names.** A naive scaffold hands every bundle the same `journal/` folder regardless of subject type; that's a category error worth naming explicitly:
+
+- **`sources/`** — universal, any bundle. Raw intake: meeting transcripts, Slack threads, exports. Nobody's voice — just the material `wiki/` gets curated from and `decisions/` gets grounded in.
+- **`ledger/`** — universal. Append-only, third-person, agent/harness-authored: what changed in this bundle and why, session by session. The audit trail an agent keeps of its own work on the subject's behalf — closer to OKF's reserved `log.md` concept than to a narrative.
+- **`journal/`** — **`person` bundles only.** First-person, human-authored, decaying (§2). Not `ledger/` under a different name — it's the subject's own voice, and only a `person` has one. An `org`/`brand`/`project` bundle carries no `journal/`; its temporal record is `ledger/` alone.
+
+The spec fixes the *mechanism* here (voice, perspective, append-only-ness) — deliberately not the *cadence*. Whether a `journal/` gets written daily, weekly, or only when something happens is an implementation's own working rhythm, not something this format prescribes.
 
 ## 4. Document frontmatter *(draft)*
 
@@ -117,16 +127,21 @@ status: active | shipped | archived              # subject lifecycle; projects f
 format_version: 0
 rises: never | filtered | de-identified          # the boundary (see §6)
 access: open | protected                         # protected → consult a whitelist
+local: true | false                              # transport/handling (see §6.1) — true (default) = sovereign, cloneable, offline-capable; false = mediated-runtime only
 legal_signoff: false
 ```
+
+- **`local:`** — a transport/handling property, distinct from `access:`/`rises:` (those govern *who* and *what*; this governs *how the bytes move*). `true` (default): the bundle is a sovereign, cloneable git repo — check it out fully, run it fully offline or against a local model. `false`: the rare bundle that must never leave a mediated runtime unmodified — served byte-scoped, streamed, never cloned raw. Treat `false` as an exception reached for deliberately, not a default posture.
 
 ## 6. The `rises:` boundary — the core extension *(draft)*
 
 `rises:` declares what, if anything, may be synthesized **out of** this bundle into a shared/derived layer:
 
 - **`never`** — nothing leaves (e.g. HR, personal, authored canon).
-- **`filtered`** — only de-identified, personal/confidential-stripped material, **opt-in**.
-- **`de-identified`** — generalized, non-identifying patterns may rise.
+- **`filtered`** — **`person` bundles.** Personal/confidential material stripped, gated by the subject's own **opt-in** — the person chooses what of their own experience feeds the shared layer. Consent is the gate, not just anonymization.
+- **`de-identified`** — **`org`/`brand`/`project` bundles.** Generalized, non-identifying patterns may rise once anonymized — there's no individual whose consent is needed, because the subject isn't a person.
+
+The distinguishing question is *whose* consent gates the rise: a `person` bundle's owner opts in per-item (`filtered`); a canonical bundle's patterns rise once they no longer identify anyone (`de-identified`), a mechanical anonymization step, not a consent step.
 
 The bundle **declares** (passive); a convergence layer **enforces** (active). This is the federated-learning shape: silos declare, the aggregator only takes what's permitted.
 
@@ -148,7 +163,7 @@ Convergence is the *only* writer of the derived/shared layer. Bundles never writ
 
 ## 9. Open questions
 
-- The exact `rises:` vocabulary and how `filtered` is operationalized (the de-identification contract).
+- The mechanical de-identification contract — `filtered` vs. `de-identified` (§6) are now distinct by *who consents*; still open is the actual checklist/algorithm a convergence layer runs to earn the `de-identified` label (what specifically must be stripped or generalized first).
 - Versioning + migration of the format.
 - How subject-specific skills compose with shared/agency skills.
 - Whether to split `type` into a binary `perspective` (`person` vs `canonical`) plus an orthogonal `kind` (`org`/`brand`/`project`/…) — the v1 evolution if subject-kinds proliferate beyond the current set.
