@@ -82,6 +82,7 @@ This is why `project` earns a type and not merely a flag on `brand`: it owns its
   sources/              # raw intake — transcripts, threads, exports (pointers or originals)
   ledger/               # append-only, agent/harness-authored — what changed in this bundle, and why
   journal/              # person-only (§2) — append-only, human-authored first-person record
+  stm/                  # (optional) person-only (§2) — append-only, uncurated, epistemically inert. See below.
   decisions/            # ADR-format decision records
   design/               # (optional) brand / design tokens (DTCG)
   skills/               # (optional) subject-specific skills
@@ -94,6 +95,20 @@ This is why `project` earns a type and not merely a flag on `brand`: it owns its
 - **`journal/`** — **`person` bundles only.** First-person, human-authored, decaying (§2). Not `ledger/` under a different name — it's the subject's own voice, and only a `person` has one. An `org`/`brand`/`project` bundle carries no `journal/`; its temporal record is `ledger/` alone.
 
 The spec fixes the *mechanism* here (voice, perspective, append-only-ness) — deliberately not the *cadence*. Whether a `journal/` gets written daily, weekly, or only when something happens is an implementation's own working rhythm, not something this format prescribes.
+
+**`stm/` — not a fourth voice.** It looks like it belongs in the list above; it doesn't. `sources/`, `ledger/`, and `journal/` are distinguished by *who is speaking and what kind of claim it is* — every one of them is citable. `stm/` is a different axis entirely: a property of *how material is read* (ambient, unbidden, sampled) rather than *who wrote it*. The same sentence, in the same person's voice, could in principle live in either `journal/` or `stm/` — what differs is the epistemic contract attached to it, not the authorship.
+
+What it's for: capturing pre-verbal material — sparks, half-formed instincts, an aesthetic pull nobody's justified yet — that every purely-curated pipeline discards first, because refinement is lossy and the incidental is exactly what it loses. A bundle built only from `wiki/`+`decisions/` produces an agent that is *correct and inert*: never wrong, and never handing you something you didn't ask for. `stm/` exists to fix that without weakening the rest of the bundle's rigor.
+
+Rules, non-negotiable:
+- **`person`-type bundles only.** Not because only a person has "an interior" — that reasoning describes `journal/`, not this. `stm/` doesn't require first-person narration at all; a `project` bundle's raw sources could in principle be sampled the same ambient way, with no new folder, since `sources/` is already universal. What `stm/` specifically requires is a *single, unambiguous owner* for first-person, un-citable material — a multi-person `brand`/`org`/`project` bundle has no one "whose" sparks these would be.
+- **Epistemically inert, structurally, not by convention.** An `stm/` entry carries no `confidence`, `basis`, `status`, or `classification` — ever. This isn't a default that happens to apply; a document tagged as `stm/` content that *does* carry one of these fields should be treated as a contamination signal, not unusual data. It can never be cited as evidence, anywhere, including within its own bundle.
+- **`rises: never`, structurally, not as a policy choice.** Rising requires curating a claim into something safe enough to generalize — and curating an `stm/` fragment enough to safely generalize it is exactly the refinement step that would have destroyed it as `stm/` content in the first place. There is no such thing as de-identified `stm/` material; by the time something is de-identified, it has stopped being this.
+- **Never an OKF export target.** OKF's own self-definition is *curated* insight. `stm/` content is definitionally not that. Exporting it wouldn't just be unnecessary — a receiving system has no way to know it must never be believed, because that guarantee only exists inside this bundle's own inertness contract. Any dotKnowledge → OKF exporter must exclude `stm/` by construction.
+- **Append-only, and never time-boxed.** Storage is cheap; attention is scarce — so any bounding happens at the *read* layer (how much gets sampled into context at once), never by deleting or expiring old entries. A rolling-window/expiry-after-N-days policy is the single most common mistake here, and it defeats the mechanism: the value of `stm/` is specifically that an old, dormant spark can resurface once it finally becomes relevant — sometimes months or years later. An implementation that force-triages `stm/` entries on a clock is optimizing this back into a second `journal/`.
+- **The rigidity lives in the contract, never the content.** No required schema on an entry beyond enough structure to keep it append-only (a timestamp is enough). The content itself stays formless — the moment it acquires the shape of a curated claim, treat that as drift, not progress.
+
+This section resolves what an earlier draft called "the chaos gap": every layer above `stm/` optimizes for precision; this is the one place the format deliberately does not, and says so structurally rather than leaving it to convention.
 
 **`skills/` (and `design/`) — the same "does this belong in the capsule or the console" question, answered by a different test.** `sources/ledger/journal` split by *voice*; `skills/` splits by a different axis: **does this capability make sense independent of which specific subject's capsule it's operating on, or does it only exist because of something particular to *this* subject?**
 
