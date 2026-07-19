@@ -13,7 +13,7 @@ AI tools are accreting private, lock-in knowledge stores that forget you the mom
 Plain files — markdown plus a small manifest:
 
 - **content** — markdown documents, each with **frontmatter metadata** (type, confidence, classification/sensitivity, relationships).
-- **manifest** (`capsule.yaml` / `BOUNDARY`) — the bundle's identity and its **boundary policy** (`rises:` — what, if anything, may be synthesized *out* of this bundle).
+- **manifest** (`bundle.yaml` / `BOUNDARY`) — the bundle's identity and its **boundary policy** (`rises:` — what, if anything, may be synthesized *out* of this bundle).
 - *(optional)* **design tokens**, **skills**, **decisions** — the operable layers that make a bundle *do work*, not just store text.
 
 ## Subject types — perspective & authority
@@ -37,7 +37,7 @@ Only `person` flips to first-person; `org`/`brand`/`project` are all canonical a
 
 ## Relationship to OKF + the ecosystem
 
-- **OKF-conformant + extensions.** `.knowledge` speaks Google's Open Knowledge Format and *extends* it with the pieces OKF doesn't cover yet: a **`BOUNDARY` / `rises:`** policy (what may leave the bundle), **classification / sensitivity** metadata, and a **capsule profile**. *Speak the standard, own the extensions.*
+- **OKF-conformant + extensions.** `.knowledge` speaks Google's Open Knowledge Format and *extends* it with the pieces OKF doesn't cover yet: a **`BOUNDARY` / `rises:`** policy (what may leave the bundle), **classification / sensitivity** metadata, and a **bundle profile**. *Speak the standard, own the extensions.*
 - **[Throughline](https://github.com/inkxel/throughline)** is the **reference engine** — it scaffolds and maintains a `.knowledge` bundle (curated wiki, append-only journal, decision records, commit hook).
 - **The convergence protocol** *(draft)* defines how a layer may **mount many bundles, honor each one's declared boundary, and synthesize across them** — without bundles ever talking to each other. The bundles stay dumb and portable; the cross-bundle intelligence lives one level up.
 

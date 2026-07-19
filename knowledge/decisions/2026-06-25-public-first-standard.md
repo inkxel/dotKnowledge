@@ -12,7 +12,7 @@ related: [[roadmap]]
 `.knowledge` is the universal layer beneath a private multi-client knowledge architecture being dogfooded inside a real organization. Two ways to take it public: (a) sanitize the private repo into a public one, or (b) build the standard public-first and have private adopters consume it. The OKF (Open Knowledge Format) orbit is early with an open contribution window — a category-leadership opportunity if a portable, boundary-aware knowledge format is staked now.
 
 ## Decision
-Build the standard **public-first** in this repo: the `.knowledge` format + OKF extensions (the `BOUNDARY`/`rises:` policy, classification metadata, the capsule profile) + a draft convergence protocol. No private/organizational data ever enters this repo. [Throughline](https://github.com/inkxel/throughline) is the reference engine. CC-BY-4.0 for the spec text. Dogfood privately → extract proven patterns into the spec; plant the flag early (thin RFC) and harden from real use.
+Build the standard **public-first** in this repo: the `.knowledge` format + OKF extensions (the `BOUNDARY`/`rises:` policy, classification metadata, the bundle profile) + a draft convergence protocol. No private/organizational data ever enters this repo. [Throughline](https://github.com/inkxel/throughline) is the reference engine. CC-BY-4.0 for the spec text. Dogfood privately → extract proven patterns into the spec; plant the flag early (thin RFC) and harden from real use.
 
 ## Consequences
 - **Positive:** no sanitization-fork drift or leak risk; clean separation of standard (public) from implementation/data (private); category-leadership window; network-effect endgame (others can deliver knowledge *as* `.knowledge`).
